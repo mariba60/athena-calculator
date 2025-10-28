@@ -55,25 +55,26 @@ function setup() {
     text("9", 295, 355);
     text("x", 408, 355);
     text("0", 75, 425);
-    text(".", 190, 425);
-    text("DEL", 280, 425);
-    text("/", 408, 425);
+    text("DEL", 170, 425);
+    text("=", 295, 425);
+    text("/", 410, 425);
 }
 
-function draw() {
+function calculate() {
+    var result = 0;
+    return result;
 }
 
 function keyPressed() {
     if (keyCode == 32) {
         setup();
         equation = [];
-    } else if (keyCode == 8) {
-        keyCount--;
-    } else {
-        keyCount++;
     }
-    if (keyCount > 8) {
+    if (keyCount > 7) {
         return;
+    }
+    if ((keyCode > 47 && keyCode < 57) || keyCode == 187 || keyCode == 189 || keyCode == 106 || keyCode == 191) {
+        keyCount++;
     }
     textSize(80);
     fill(0);
@@ -107,5 +108,36 @@ function keyPressed() {
     } else if (key === '0') {
         text("0", 50 * keyCount, 130);
         equation.push('0');
+    } else if (key == '+') {
+        text("+", 50 * keyCount, 130);
+        equation.push("+");
+    } else if (key == '-') {
+        text("-", 50 * keyCount, 130);
+        equation.push("-");
+    } else if (key == '*') {
+        text("x", 50 * keyCount, 130);
+        equation.push("*");
+    } else if (key == '/') {
+        text("/", 50 * keyCount, 130);
+        equation.push("/");
+    } else if (key === 'Enter') {
+        calculate();
     }
+}
+
+function mousePressed() {
+    if (mouseX > 40 && mouseX < 130 && mouseY > 180 && mouseY < 230) {
+        keyCount++;
+        key = '1';
+        keyPressed();
+    } else if (mouseX > 150 && mouseX < 240 && mouseY > 180 && mouseX < 230) {
+        keyCount++;
+        key = '2';
+        keyPressed();
+    } else if (mouseX > 260 && mouseX < 350 && mouseY > 180 && mouseX < 230) {
+        keyCount++;
+        key = '3';
+    }
+    keyPressed();
+    return;
 }

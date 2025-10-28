@@ -1,0 +1,18 @@
+html {
+    height: 100%; /* to center the canvas */
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* full viewport height */
+    margin: 0;
+    padding: 0;
+    background-color: pink;
+}
+
+canvas {
+    border-radius: 20px;
+    border: 5px solid white;
+}

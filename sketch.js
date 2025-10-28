@@ -1,8 +1,10 @@
 let keyCount;
 let equation = [];
+let lastInput; // 0 = number, 1 = +, 2 = -, 3 = *, 4 = /
 
 function setup() {
     keyCount = 0;
+    lastInput = 5;
     
     createCanvas(500, 500);
     background(156, 61, 108); // dark pink
@@ -58,6 +60,9 @@ function setup() {
     text("DEL", 170, 425);
     text("=", 295, 425);
     text("/", 410, 425);
+
+    textSize(80);
+    fill(0);
 }
 
 function calculate() {
@@ -73,71 +78,146 @@ function keyPressed() {
     if (keyCount > 7) {
         return;
     }
-    if ((keyCode > 47 && keyCode < 57) || keyCode == 187 || keyCode == 189 || keyCode == 106 || keyCode == 191) {
+    if ((keyCode > 47 && keyCode < 57)) {
         keyCount++;
+        lastInput = 0;
+    } else if (keyCode == 187) {
+        keyCount++;
+        lastInput = 1;
+    } else if (keyCode == 189) {
+        keyCount++;
+        lastInput = 2;
+    } else if (keyCode == 106) {
+        keyCount++;
+        lastInput = 3;
+    } else if (keyCode == 191) {
+        keyCount++;
+        lastInput = 4;
     }
-    textSize(80);
-    fill(0);
-    if (key === '1') {
+    if (key == '1') {
         text("1", 50 * keyCount, 130);
         equation.push('1');
-    } else if (key === '2') {
+    } else if (key == '2') {
         text("2", 50 * keyCount, 130);
         equation.push('2');
-    } else if (key === '3') {
+    } else if (key == '3') {
         text("3", 50 * keyCount, 130);
         equation.push('3');
-    } else if (key === '4') {
+    } else if (key == '4') {
         text("4", 50 * keyCount, 130);
         equation.push('4');
-    } else if (key === '5') {
+    } else if (key == '5') {
         text("5", 50 * keyCount, 130);
         equation.push('5');
-    } else if (key === '6') {
+    } else if (key == '6') {
         text("6", 50 * keyCount, 130);
         equation.push('6');
-    } else if (key === '7') {
+    } else if (key == '7') {
         text("7", 50 * keyCount, 130);
         equation.push('7');
-    } else if (key === '8') {
+    } else if (key == '8') {
         text("8", 50 * keyCount, 130);
         equation.push('8');
-    } else if (key === '9') {
+    } else if (key == '9') {
         text("9", 50 * keyCount, 130);
         equation.push('9');
-    } else if (key === '0') {
+    } else if (key == '0') {
         text("0", 50 * keyCount, 130);
         equation.push('0');
-    } else if (key == '+') {
-        text("+", 50 * keyCount, 130);
-        equation.push("+");
-    } else if (key == '-') {
-        text("-", 50 * keyCount, 130);
-        equation.push("-");
-    } else if (key == '*') {
-        text("x", 50 * keyCount, 130);
-        equation.push("*");
-    } else if (key == '/') {
-        text("/", 50 * keyCount, 130);
-        equation.push("/");
-    } else if (key === 'Enter') {
+    }
+    if (lastInput = 0) {
+        if (key == '+') {
+            text("+", 50 * keyCount, 130);
+            equation.push("+");
+        } else if (key == '-') {
+            text("-", 50 * keyCount, 130);
+            equation.push("-");
+        } else if (key == '*') {
+            text("x", 50 * keyCount, 130);
+            equation.push("*");
+        } else if (key == '/') {
+            text("/", 50 * keyCount, 130);
+            equation.push("/");
+        }
+    }
+    if (keyCode == '13') {
         calculate();
     }
 }
 
 function mousePressed() {
+    if ((mouseX > 150 && mouseX < 240 && mouseY > 390 && mouseY < 440)) {
+        setup();
+        equation = [];
+    }
+    if (keyCount > 7 && !enterkey) {
+        return;
+    }
     if (mouseX > 40 && mouseX < 130 && mouseY > 180 && mouseY < 230) {
         keyCount++;
-        key = '1';
-        keyPressed();
-    } else if (mouseX > 150 && mouseX < 240 && mouseY > 180 && mouseX < 230) {
+        text("1", 50 * keyCount, 130);
+        equation.push('1');
+    } else if (mouseX > 150 && mouseX < 240 && mouseY > 180 && mouseY < 230) {
         keyCount++;
-        key = '2';
-        keyPressed();
-    } else if (mouseX > 260 && mouseX < 350 && mouseY > 180 && mouseX < 230) {
+        text("2", 50 * keyCount, 130);
+        equation.push('2');
+    } else if (mouseX > 260 && mouseX < 350 && mouseY > 180 && mouseY < 230) {
         keyCount++;
-        key = '3';
+        text("3", 50 * keyCount, 130);
+        equation.push('3');
+    } else if (mouseX > 40 && mouseX < 130 && mouseY > 250 && mouseY < 300) {
+        keyCount++;
+        text("4", 50 * keyCount, 130);
+        equation.push('4');
+    } else if (mouseX > 150 && mouseX < 240 && mouseY > 250 && mouseY < 300) {
+        keyCount++;
+        text("5", 50 * keyCount, 130);
+        equation.push('5');
+    } else if (mouseX > 260 && mouseX < 350 && mouseY > 250 && mouseY < 300) {
+        keyCount++;
+        text("6", 50 * keyCount, 130);
+        equation.push('6');
+    } else if (mouseX > 40 && mouseX < 130 && mouseY > 320 && mouseY < 370) {
+        keyCount++;
+        text("7", 50 * keyCount, 130);
+        equation.push('7');
+    } else if (mouseX > 150 && mouseX < 240 && mouseY > 320 && mouseY < 370) {
+        keyCount++;
+        text("8", 50 * keyCount, 130);
+        equation.push('8');
+    } else if (mouseX > 260 && mouseX < 350 && mouseY > 320 && mouseY < 370) {
+        keyCount++;
+        text("9", 50 * keyCount, 130);
+        equation.push('9');
+    } else if (mouseX > 40 && mouseX < 130 && mouseY > 390 && mouseY < 440) {
+        keyCount++;
+        text("0", 50 * keyCount, 130);
+        equation.push('0');
     }
-    keyPressed();
-    return;
+    if (lastInput == 0) {
+        if (mouseX > 370 && mouseX < 460 && mouseY > 180 && mouseY < 230) {
+            keyCount++;
+            text("+", 50 * keyCount, 130);
+            equation.push("+");
+            lastInput = 1;
+        } else if (mouseX > 370 && mouseX < 460 && mouseY > 250 && mouseY < 300) {
+            keyCount++;
+            text("-", 50 * keyCount, 130);
+            equation.push("-");
+            lastInput = 2;
+        } else if (mouseX > 370 && mouseX < 460 && mouseY > 320 && mouseY < 370) {
+            keyCount++;
+            text("x", 50 * keyCount, 130);
+            equation.push("*");
+            lastInput = 3;
+        } else if (mouseX > 370 && mouseX < 460 && mouseY > 390 && mouseY < 440) {
+            keyCount++;
+            text("/", 50 * keyCount, 130);
+            equation.push("/");
+            lastInput = 4;
+        }
+    }
+    if (key === 'Enter') {
+        calculate();
+    }
 }

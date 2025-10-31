@@ -110,7 +110,7 @@ function keyPressed() {
     } else if (keyCount > 7) {
         return;
     }
-    if ((keyCode > 47 && keyCode < 58 && !keyPressed(SHIFT))) { // if it's a number
+    if (keyCode > 47 && keyCode < 58 && !keyIsDown(SHIFT)) { // { // if it's a number
         if (lastInput == 3) setup();
         keyCount++;
         text(key, 50 * keyCount, 130);
@@ -126,7 +126,7 @@ function keyPressed() {
             keyCount++;
             text("-", 50 * keyCount, 130);
             equation.push("-");
-        } else if (keyCode == 56 && keyPressed(SHIFT)) {
+        } else if (keyCode == 56 && keyIsDown(SHIFT)) {
             keyCount++;
             text("*", 50 * keyCount, 130);
             equation.push("*");

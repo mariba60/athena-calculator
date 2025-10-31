@@ -1,6 +1,6 @@
 let keyCount;
+let lastInput; // 0 = number, 1 = operation, 3 = just made a calculation
 let equation = [];
-let lastInput; // 0 = number, 1 = operation
 
 function setup() {
     keyCount = 0;
@@ -41,7 +41,7 @@ function setup() {
     rect(370, 390, 90, 50, 10);
 
     // keys
-    fill(355);
+    fill(255);
     textSize(30);
     text("1", 75, 215);
     text("2", 185, 215);
@@ -64,38 +64,43 @@ function setup() {
     fill(0);
 }
 
-function performOperation(num1, num2, operator) {
-    if (operator == '+') {
-        return num1 + num2;
-    } else if (operator == '-') {
-        return num2 - num1;
-    } else if (operator == '*') {
-        return num1 * num2;
-    } else if (operator == '/') {
-        return num2 / num1;
-    }
-}
-
 function calculate() {
-    var result = 0;
-    var equation2 = [];
     // first pass - make all numbers together
-    var i = 1;
-    for (var i = 0; i < equation.size(); i++) {
-        if (equation[i] != '+' | '-' | '*' | '/' && equation[i - 1] != '+' | '-' | '*' | '/') {
-            equation[i] = "" + (unchar(equation[i - 1]) * 10 + equation[i]);
-            equation[i - 1] = '-1';
+    for (var i = 1; i < equation.length; i++) {
+        if (!['+', '-', '*', '/'].includes(equation[i]) && !['+', '-', '*', '/'].includes(equation[i - 1])) {
+            equation[i] = "" + (parseInt(equation[i - 1]) * 10 + parseInt(equation[i]));
+            equation.splice(i - 1, 1);
+            i = 1;
         }
     }
-    // second pass
-    for (var i = 0; i < equation.size(); i++) {
-        if (unchar(equation[i]) >= 0) {
-            equation2.push(equation[i]);
+    while (equation.length > 1) {
+        for (var i = 0; i < equation.length; i++) {
+            if (equation[i] == '*') {
+                equation[i - 1] = parseFloat(equation[i - 1]) * parseFloat(equation[i + 1]);
+                equation.splice(i, 2);
+                i = 0;
+            } else if (equation[i] == '/') {
+                equation[i - 1] = parseFloat(equation[i - 1]) / parseFloat(equation[i + 1]);
+                equation.splice(i, 2);
+                i = 0;
+            }
+        }
+        for (var i = 0; i < equation.length; i++) {
+            if (equation[i] == '+') {
+                equation[i - 1] = parseFloat(equation[i - 1]) + parseFloat(equation[i + 1]);
+                equation.splice(i, 2);
+                i = 0;
+            } else if (equation[i] == '-') {
+                equation[i - 1] = parseFloat(equation[i - 1]) - parseFloat(equation[i + 1]);
+                equation.splice(i, 2);
+                i = 0;
+            }
         }
     }
     setup();
-    //text(equation2, 0, 0);
-    return result;
+    lastInput = 3;
+    text(equation[0], 50, 130);
+    equation = [];
 }
 
 function keyPressed() {
@@ -105,16 +110,13 @@ function keyPressed() {
     } else if (keyCount > 7) {
         return;
     }
-    if ((keyCode > 47 && keyCode < 58)) { // if it's a number
+    if ((keyCode > 47 && keyCode < 58 && !keyPressed(SHIFT))) { // if it's a number
+        if (lastInput == 3) setup();
         keyCount++;
         text(key, 50 * keyCount, 130);
+        equation.push(key);
         lastInput = 0;
     }
-    // if (key == '1') {
-    //     text("1", 50 * keyCount, 130);
-    // } else if (key == '2') {
-    //     text("2", 50 * keyCount, 130);
-    // }
     if (lastInput == 0) {
         if (key == '+') {
             keyCount++;
@@ -124,9 +126,9 @@ function keyPressed() {
             keyCount++;
             text("-", 50 * keyCount, 130);
             equation.push("-");
-        } else if (key == '*') {
+        } else if (keyCode == 56 && keyPressed(SHIFT)) {
             keyCount++;
-            text("x", 50 * keyCount, 130);
+            text("*", 50 * keyCount, 130);
             equation.push("*");
         } else if (key == '/') {
             keyCount++;
@@ -134,8 +136,9 @@ function keyPressed() {
             equation.push("/");
         }
     }
-    if (keyCode == '13') {
-        text(calculate(), 50, 130);
+    if (keyCode == 13 || (keyCode == 187 && !keyIsDown(SHIFT))) {
+        //text(calculate(), 50, 130);
+        calculate();
     }
 }
 
@@ -187,8 +190,7 @@ function mousePressed() {
         keyCount++;
         text("0", 50 * keyCount, 130);
         equation.push('0');
-    }
-    if (mouseX > 370 && mouseX < 460 && mouseY > 180 && mouseY < 230) {
+    } else if (mouseX > 370 && mouseX < 460 && mouseY > 180 && mouseY < 230) {
         keyCount++;
         text("+", 50 * keyCount, 130);
         equation.push("+");
@@ -198,14 +200,13 @@ function mousePressed() {
         equation.push("-");
     } else if (mouseX > 370 && mouseX < 460 && mouseY > 320 && mouseY < 370) {
         keyCount++;
-        text("x", 50 * keyCount, 130);
+        text("*", 50 * keyCount, 130);
         equation.push("*");
     } else if (mouseX > 370 && mouseX < 460 && mouseY > 390 && mouseY < 440) {
         keyCount++;
         text("/", 50 * keyCount, 130);
         equation.push("/");
-    }
-    if (key === 'Enter') {
+    } else if (mouseX > 260 && mouseX < 350 && mouseY > 390 && mouseY < 440) {
         calculate();
     }
 }
